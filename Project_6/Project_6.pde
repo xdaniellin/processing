@@ -116,7 +116,7 @@ void draw() {
        }
      if(endFlow == true);
        {
-         if(saveNow == true)
+         //if(saveNow == true)
           {
         //     camFrame = createImage(width, height, ARGB);
              //for(int i = 0; i < img.pixels.length; i++)
@@ -124,7 +124,7 @@ void draw() {
                //img.pixels[i] = color(
             // }       
           //   saveFrame("Orby-#####.png");
-           saveNow = false;
+           //saveNow = false;
           }
          mirrorVideoDisplay();
          //image(camFrame,
