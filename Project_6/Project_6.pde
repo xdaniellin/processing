@@ -7,7 +7,7 @@ Webcam webcam;
 Player player1, player2;
 Paddle paddle1, paddle2;
 Ball ball;
-PGraphics camFrame;
+PGraphics camFrame, saveImg;
 
 int[] webcamLeft_XY, webcamRight_XY;
 int fromEdge = 20;
@@ -27,7 +27,7 @@ float player2_progress = 0;
 float paddleLengthIncrement = 50;
 float orbSizeIncrement = 15;
 float progressIncrement = .12; //.12;
-float lastTime;
+float lastTime=9999999;
 boolean orbShrink = false;
 boolean paddleGrow = false;
 boolean levelUp_1 = false;
@@ -54,9 +54,10 @@ boolean gameStart = true;
 boolean p1_win = false;
 boolean p2_win = false;
 boolean displayCourt = true;
-boolean saveNow = true;
+boolean saveNow = false;
 float snapY_bot, snapY_top;
 boolean pauseRec = false;
+boolean saveAni = false;
 void setup() {
   //Setup
   //size(1280, 720, PDF, "Orby.pdf");
@@ -64,8 +65,14 @@ void setup() {
   targetY_bot = height/2;
   paddle2_X = width - (fromEdge*2);
   snapY_bot = height;
-  snapY_top = -height/2; 
+  snapY_top = -height/2;
+  saveImg_width = width;
+  saveImg_height = height;
+  imgX = width/2;
+  imgY = height/2;
   camSetup();
+  
+  frameRate(200);
   
   //Class initializations
   player1 = new Player(); player2 = new Player();
@@ -76,6 +83,7 @@ void setup() {
   paddle1_H = paddle1.getH();
   paddle2_H = paddle2.getH();
   camFrame = createGraphics(width, height);
+  saveImg = createGraphics(width, height);
 }
 
 void draw() {
@@ -116,23 +124,33 @@ void draw() {
        }
      if(endFlow == true);
        {
-         //if(saveNow == true)
-          {
-        //     camFrame = createImage(width, height, ARGB);
-             //for(int i = 0; i < img.pixels.length; i++)
-          //   {
-               //img.pixels[i] = color(
-            // }       
-          //   saveFrame("Orby-#####.png");
-           //saveNow = false;
-          }
+
          mirrorVideoDisplay();
-         //image(camFrame,
          noStroke();
          if(strokeFadeEase < 30)
          {
-           snapAnimation();
+           snap = true;
          }
+         
+         if(snap == true)
+         {
+           snapAnimation(); 
+         }
+           if(displayCourt == true)
+      {
+      strokeWeight(10);
+      stroke(255);
+      line(0,4,width,4);
+      line(width/2,0,width/2,height);
+      line(0,height-4,width,height-4);
+      stroke(0);
+      strokeWeight(0);
+      }
+         if(saveAni == true)
+         {
+           saveAnimation();
+         }
+         
          
          strokeFadeEase += (0 - strokeFadeEase) * .20;  
          fill(254,46,46, strokeFadeEase);
@@ -148,20 +166,11 @@ void draw() {
   }
     
 
-  if(displayCourt == true)
-  {
-      strokeWeight(10);
-      stroke(255);
-      line(0,4,width,4);
-      line(width/2,0,width/2,height);
-      line(0,height-4,width,height-4);
-      stroke(0);
-      strokeWeight(4);
-  }
+
     
       if(gameStart == true)
-    {    mirrorVideoDisplay();
-        if(displayCourt == true)
+    {    mirrorVideoDisplay();        
+      if(displayCourt == true)
   {
       strokeWeight(10);
       stroke(255);
@@ -171,7 +180,6 @@ void draw() {
       stroke(0);
       strokeWeight(4);
   }
-    
     
     //ellipse(orb1_X, orb1_Y, orb1_Size, orb1_Size);
     if (levelUp_1 == false)
