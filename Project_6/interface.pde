@@ -5,15 +5,17 @@ boolean waiting = false;
 boolean waiting2 = true;
 boolean waiting3 = true;
 boolean readyScreen = false;
+boolean firstAni = true;
+boolean secondAni = false;
 float targetY_top = 0;
 float targetY_bot;
 float snapEasing = .8;
 float saveImg_width, saveImg_height;
 float saveEasing = .4;
-boolean firstAni = true;
-boolean secondAni = false;
 float targetW, targetH, imgX, imgY, targetX, targetY;
+int count = 0;
 float lastTime_save;
+
 
   //PImage tempFrame = cam.get(); (make it global)
   //image(tempFrame,
@@ -25,6 +27,7 @@ float lastTime_save;
   
 void snapAnimation()
 {
+
   if(waiting==true)
   {
    if ((millis() - lastTime) > 1400) 
@@ -35,13 +38,15 @@ void snapAnimation()
   }
     if(saveNow == true)
     {
+      saveImg = createGraphics(width, height);
+
       saveImg.beginDraw();
       saveImg.image(camFrame,0,0);   
 
   //    saveNow = false;
     }
     
-      
+        
   if( ((0 - snapY_top) * snapEasing) < 0.05)
   {
     pauseRec = true;   
@@ -49,7 +54,7 @@ void snapAnimation()
     displayCourt = false;
     displayText = true;
   }
-  
+
   if (displayText == true)
   {
     textSize(50);
@@ -95,14 +100,13 @@ void snapAnimation()
     saveImg.textSize(20);
     saveImg.text("Logo_here", 65, 25);
     saveImg.endDraw();
-    saveFrame("Orby-#####.png");
+    saveFrame("Orby-" + nf(count,3) +".tif");
+    count++;
     saveNow = false;
-    println("saveNow false");
     snap = false;
     saveAni = true;
     pauseRec = false;
     displayText = false;
-    println("holla");
   }
   
   fill(255,255,255);
@@ -114,7 +118,7 @@ void snapAnimation()
   snapY_bot += (targetY_bot - snapY_bot) * snapEasing;
   snapY_top += (targetY_top - snapY_top) * snapEasing;
   rect(0,snapY_bot,width,height/2);
-  rect(0,snapY_top,width,height/2); 
+  rect(0,snapY_top,width,height/2);
 }
 
 
@@ -131,7 +135,6 @@ void saveAnimation()
     targetX = imgX;
     targetY = imgY;
     lastTime_save = millis();
-    println(lastTime_save);
     waiting3 = true;
     firstAni = false;
   }
@@ -151,12 +154,12 @@ void saveAnimation()
   
   if(secondAni == true)
   {
-    println("ye");
     targetW = saveImg_width* .05;
     targetH = saveImg_height * .05;
     targetX = width - (targetW/2) - 10;
     targetY = height - (targetH/2) - 10;
     secondAni = false;
+    strokeFadeEase = 255;
     readyScreen = true;
   }
   
@@ -170,7 +173,7 @@ class Button
 {
    int buttonX;
    int buttonY;
-   float hoverIncrement;
+   float hoverIncrement = .60;
    float circleR;
    float activateProgress;
    color defaultColor, selectedColor, hoverColor, activateColor;
@@ -184,9 +187,11 @@ class Button
   
   boolean circleDisplay(float cursorX, float cursorY, float cursorR)
   {
+    fill(255);
     ellipse(buttonX, buttonY, circleR, circleR);
+    fill(0);
     arc(buttonX, buttonY, circleR, circleR, PI*3/2, PI*3/2+activateProgress, PIE);
-    if (coverBall(buttonX, buttonY, circleR, cursorX, cursorY, cursorR) == true)
+    if (coverBall(cursorX, cursorY, cursorR/2,buttonX, buttonY, circleR/4) == true)
     {
       activateProgress += hoverIncrement;
     }
@@ -205,7 +210,9 @@ class Button
 boolean coverBall(float cx1, float cy1, float cr1, float cx2, float cy2, float cr2) {
   if (dist(cx1, cy1, cx2, cy2) < cr1 + cr2) {
       return true;
-    } else {
+    } 
+    else
+    {
       return false;
     }
   }

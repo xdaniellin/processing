@@ -116,6 +116,7 @@ class Ball{
     // Resets things if the ball leaves the screen
     if ((ballX > width + ballDiameter) || (ballX < -ballDiameter)) {
       endFlow = true;
+      blinkRed = true;
       gameStart = false;
       strokeFadeEase = 200;
       if(ballX > width + ballDiameter)
