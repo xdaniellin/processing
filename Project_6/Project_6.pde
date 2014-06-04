@@ -7,6 +7,7 @@ Webcam webcam;
 Player player1, player2;
 Paddle paddle1, paddle2;
 Ball ball;
+Button player1_start, player2_start;
 PGraphics camFrame, saveImg;
 
 int[] webcamLeft_XY, webcamRight_XY;
@@ -32,6 +33,7 @@ boolean orbShrink = false;
 boolean paddleGrow = false;
 boolean levelUp_1 = false;
 boolean levelUp_2 = false;
+boolean startScreen = false;
 float changeFrames = 12;
 float iter=0;
 float orb1Shadow_Size = orb1_Size;
@@ -78,6 +80,9 @@ void setup() {
   player1 = new Player(); player2 = new Player();
   paddle1 = new Paddle(paddle1_X); paddle2 = new Paddle(paddle2_X);
   ball = new Ball(paddle1.getW(), paddle1.getH());
+  player1_start = new Button(width/4, height, 50);
+  player2_start = new Button(width*3/4, height, 50);
+
   
   //Global variable initializations
   paddle1_H = paddle1.getH();
@@ -118,6 +123,10 @@ void draw() {
     
     if(gameStart == false)
     {
+      if(readyScreen == true)
+      {
+        
+      }
       if(startFlow == true);
        {
          //ellipse(orb1_X, orb1_Y, orb1_Size, orb1_Size);
@@ -163,6 +172,11 @@ void draw() {
            rect(width/2,0,width/2,height);
          }
        }  
+       if(startScreen == true)
+       {
+         player1_start.circleDisplay(orb1_X, orb1_Y, orb1_Size);
+         player2_start.circleDisplay(orb2_X, orb2_Y, orb2_Size);
+       }
   }
     
 

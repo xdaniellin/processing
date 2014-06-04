@@ -4,9 +4,10 @@ boolean snap = false;
 boolean waiting = false;
 boolean waiting2 = true;
 boolean waiting3 = true;
+boolean readyScreen = false;
 float targetY_top = 0;
 float targetY_bot;
-float snapEasing = 0.73;
+float snapEasing = .8;
 float saveImg_width, saveImg_height;
 float saveEasing = .4;
 boolean firstAni = true;
@@ -18,50 +19,9 @@ float lastTime_save;
   //image(tempFrame,
   //make new Pgraphics, load image flipped into pgraphics, then save as a pgraphics instead of saving as an image
 
-void saveAnimation()
-{
-  imageMode(CENTER);
-  image(saveImg,imgX,imgY,saveImg_width, saveImg_height);
-  if(firstAni == true)
-  {
-    displayCourt = true;
-    targetW = saveImg_width * .7;
-    targetH = saveImg_height * .7;
-    targetX = imgX;
-    targetY = imgY;
-    lastTime_save = millis();
-    println(lastTime_save);
-    waiting3 = true;
-    firstAni = false;
-  }
-  saveImg_width+= (targetW - saveImg_width) * saveEasing;
-  saveImg_height+= (targetH - saveImg_height) * saveEasing;
-  imgX += (targetX - imgX) * saveEasing;
-  imgY += (targetY - imgY) * saveEasing;
-  
- if(waiting3 == true)
- {
-    if( (millis()-lastTime_save) > 800)
-    {
-      secondAni = true;
-      waiting3 = false;
-    }
- }
-  
-  if(secondAni == true)
-  {
-    println("ye");
-    targetW = saveImg_width* .05;
-    targetH = saveImg_height * .05;
-    targetX = width - (targetW/2) - 10;
-    targetY = height - (targetH/2) - 10;
-    secondAni = false;
-  }
-  
 
   
-  imageMode(CORNER);
-}
+
   
 void snapAnimation()
 {
@@ -75,16 +35,13 @@ void snapAnimation()
   }
     if(saveNow == true)
     {
-      saveFrame("Orby-#####.png");
       saveImg.beginDraw();
       saveImg.image(camFrame,0,0);   
 
   //    saveNow = false;
     }
     
-  
-
-    
+      
   if( ((0 - snapY_top) * snapEasing) < 0.05)
   {
     pauseRec = true;   
@@ -119,6 +76,7 @@ void snapAnimation()
     waiting2 = false;
     }
   }
+
     
   if(saveNow == true)
   {
@@ -137,6 +95,7 @@ void snapAnimation()
     saveImg.textSize(20);
     saveImg.text("Logo_here", 65, 25);
     saveImg.endDraw();
+    saveFrame("Orby-#####.png");
     saveNow = false;
     println("saveNow false");
     snap = false;
@@ -158,16 +117,106 @@ void snapAnimation()
   rect(0,snapY_top,width,height/2); 
 }
 
-class Interface
+
+void saveAnimation()
 {
- void intro_1()
+  imageMode(CENTER);
+  image(saveImg,imgX,imgY,saveImg_width, saveImg_height);
+  if(firstAni == true)
+  {
+    displayCourt = true;
+    startScreen = true;
+    targetW = saveImg_width * .7;
+    targetH = saveImg_height * .7;
+    targetX = imgX;
+    targetY = imgY;
+    lastTime_save = millis();
+    println(lastTime_save);
+    waiting3 = true;
+    firstAni = false;
+  }
+  saveImg_width+= (targetW - saveImg_width) * saveEasing;
+  saveImg_height+= (targetH - saveImg_height) * saveEasing;
+  imgX += (targetX - imgX) * saveEasing;
+  imgY += (targetY - imgY) * saveEasing;
+  
+ if(waiting3 == true)
  {
-   
- } 
- 
- void intro_2()
- {
+    if( (millis()-lastTime_save) > 800)
+    {
+      secondAni = true;
+      waiting3 = false;
+    }
  }
+  
+  if(secondAni == true)
+  {
+    println("ye");
+    targetW = saveImg_width* .05;
+    targetH = saveImg_height * .05;
+    targetX = width - (targetW/2) - 10;
+    targetY = height - (targetH/2) - 10;
+    secondAni = false;
+    readyScreen = true;
+  }
+  
+  
+  
+  imageMode(CORNER);
+}
+
+
+class Button
+{
+   int buttonX;
+   int buttonY;
+   float hoverIncrement;
+   float circleR;
+   float activateProgress;
+   color defaultColor, selectedColor, hoverColor, activateColor;
+  
+  Button(int X, int Y, float radius)
+  {
+   buttonX = X;
+   buttonY = Y;
+   circleR = radius;
+  }
+  
+  boolean circleDisplay(float cursorX, float cursorY, float cursorR)
+  {
+    ellipse(buttonX, buttonY, circleR, circleR);
+    arc(buttonX, buttonY, circleR, circleR, PI*3/2, PI*3/2+activateProgress, PIE);
+    if (coverBall(buttonX, buttonY, circleR, cursorX, cursorY, cursorR) == true)
+    {
+      activateProgress += hoverIncrement;
+    }
+    else 
+    {
+      activateProgress = 0;
+    }
+      if( activateProgress >= 2*PI )
+       {
+         return true;
+       }
+       else
+       { return false;}
+  }
+
+boolean coverBall(float cx1, float cy1, float cr1, float cx2, float cy2, float cr2) {
+  if (dist(cx1, cy1, cx2, cy2) < cr1 + cr2) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+ void intro_1()
+   {
+     
+   } 
+   
+ void intro_2()
+   {
+   }
 }
 
 //    println(sketchPath(""));
