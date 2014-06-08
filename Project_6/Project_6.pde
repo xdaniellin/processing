@@ -1,13 +1,15 @@
 import processing.video.*;
 import processing.pdf.*;
 
-
 Capture cam;
 Webcam webcam;
 Player player1, player2;
 Paddle paddle1, paddle2;
 Ball ball;
 Button player1_start, player2_start;
+Button p1_intro1;
+Button p1_1x1;
+Intro player1_intro, player2_intro;
 PGraphics camFrame, saveImg;
 
 int[] webcamLeft_XY, webcamRight_XY;
@@ -43,16 +45,16 @@ float temp_orb2_Size = 0;
 float temp_paddle2_H;
 int strokeFade = 255;
 float temp_paddle1_H = 0;
-int strokeFadeEase = 100;
+int strokeFadeEase; //=100;
 
 boolean missingLight_L = false;
 boolean missingLight_R = false;
 
-boolean startFlow = false;
+boolean startFlow = true;
 boolean endFlow = false;
 boolean resetEndFlow = true;
 
-boolean gameStart = true;
+boolean gameStart = false;
 
 boolean p1_win = false;
 boolean p2_win = false;
@@ -62,6 +64,11 @@ float snapY_bot, snapY_top;
 boolean pauseRec = false;
 boolean saveAni = false;
 boolean blinkRed = true;
+
+color p1c_1x1 = color(255,0,0,128);
+
+color p1_color, p2_color;
+
 void setup() {
   //Setup
   //size(1280, 720, PDF, "Orby.pdf");
@@ -86,6 +93,10 @@ void setup() {
   ball = new Ball(paddle1.getW(), paddle1.getH());
   player1_start = new Button(width/4, height/2, 400);
   player2_start = new Button(width*3/4, height/2, 400);
+  player1_intro = new Intro(1);
+  player2_intro = new Intro(2);
+  p1_intro1 = new Button(width/4, height/2+250, 200);
+  p1_1x1 = new Button(100,100,150,p1c_1x1);
 
 
   //Global variable initializations
@@ -125,73 +136,71 @@ void draw() {
     orb2_X += (player2_X - orb2_X) * easing;
     orb2_Y += (player2_Y - orb2_Y) * easing;
 
-    if (gameStart == false)
+    if(gameStart == false)
     {
-      if (readyScreen == true)
-      {
-      }
-      if (startFlow == true);
-      {
-        //ellipse(orb1_X, orb1_Y, orb1_Size, orb1_Size);
-      }
-      if (endFlow == true);
-      {
-
         mirrorVideoDisplay();
-        noStroke();
-        if (strokeFadeEase < 30)
-        {
-          snap = true;
-          blinkRed = false;
-        }
-
-        if (snap == true)
-        {
-          snapAnimation();
-        }
-        if (displayCourt == true)
-        {
-          strokeWeight(10);
-          stroke(255);
-          line(0, 4, width, 4);
-          line(width/2, 0, width/2, height);
-          line(0, height-4, width, height-4);
-          stroke(0);
-          strokeWeight(0);
-        }
-        if (startScreen == true)
-        {
-          if (player1_start.circleDisplay(orb1_X, orb1_Y, orb1_Size-100) == true)
-          {
-            gameStart = true;
-            startScreen= false;
-            resetEndFlow = true;
-            targetY_bot = height/2;
-            targetY_top = 0;            
-          }
-          //player2_start.circleDisplay(orb2_X+300, orb2_Y, orb2_Size);
-          ellipse(orb1_X, orb1_Y, orb1_Size-100, orb1_Size-100);
-          //ellipse(orb2_X, orb2_Y, orb2_Size, orb2_Size-100);
-        }
-        if (saveAni == true)
-        {
-          saveAnimation();
-        }
-
-        if (blinkRed == true)
-        {
-          strokeFadeEase += (0 - strokeFadeEase) * .20;  
-          fill(254, 46, 46, strokeFadeEase);
-          if (p1_win == false)
-          {
-            rect(0, 0, width/2, height);
-          }
-          if (p2_win == false)
-          {
-            rect(width/2, 0, width/2, height);
-          }
-        }
+      if(startFlow == true)
+      {
+        player1_intro.display();
+        //player2_intro.display();
       }
+      if(endFlow == true)
+      {
+              //mirrorVideoDisplay();
+              noStroke();
+              if (strokeFadeEase < 30)
+              {
+                snap = true;
+                blinkRed = false;
+              }
+      
+              if (snap == true)
+              {
+                snapAnimation();
+              }
+              if (displayCourt == true)
+              {
+                strokeWeight(10);
+                stroke(255);
+                line(0, 4, width, 4);
+                line(width/2, 0, width/2, height);
+                line(0, height-4, width, height-4);
+                stroke(0);
+                strokeWeight(0);
+              }
+              if (startScreen == true)
+              {
+                if (player1_start.circleDisplay(orb1_X, orb1_Y, orb1_Size-100) == true)
+                {
+                  gameStart = true;
+                  startScreen= false;
+                  resetEndFlow = true;
+                  targetY_bot = height/2;
+                  targetY_top = 0;            
+                }
+                //player2_start.circleDisplay(orb2_X+300, orb2_Y, orb2_Size);
+                ellipse(orb1_X, orb1_Y, orb1_Size-100, orb1_Size-100);
+                //ellipse(orb2_X, orb2_Y, orb2_Size, orb2_Size-100);
+              }
+              if (saveAni == true)
+              {
+                saveAnimation();
+              }
+              if (blinkRed == true)
+              {
+                strokeFadeEase += (0 - strokeFadeEase) * .20;  
+                fill(254, 46, 46, strokeFadeEase);
+                if (p1_win == false)
+                {
+                  rect(0, 0, width/2, height);
+                }
+                if (p2_win == false)
+                {
+                  rect(width/2, 0, width/2, height);
+                }
+              }
+      }
+      
     }
 
 
@@ -321,7 +330,8 @@ void draw() {
         {
           textSize(200);
           text("?", width*3/4, height/2);
-        } else
+        } 
+        else
         {
           ellipse(orb2_X, orb2_Y, orb2_Size, orb2_Size);
           arc(orb2_X, orb2_Y, orb2_Size, orb2_Size, PI*3/2, PI*3/2+player2_progress, PIE);

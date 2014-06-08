@@ -176,20 +176,52 @@ class Button
    float hoverIncrement = .60;
    float circleR;
    float activateProgress;
-   color defaultColor, selectedColor, hoverColor, activateColor;
+   color defaultColor = 255;
+   color selectedColor, hoverColor, activateColor, returnColor;
+   float buttonEasing = 0.35;
+   boolean circleAni = false;
+   float tempCircleR;
+   float tempFill = 0;
   
   Button(int X, int Y, float radius)
   {
    buttonX = X;
    buttonY = Y;
    circleR = radius;
+   tempCircleR = circleR;
+  }
+
+  Button(int X, int Y, float radius, color defaultC)
+  {
+   buttonX = X;
+   buttonY = Y;
+   circleR = radius;
+   defaultColor = defaultC;
+   selectedColor = defaultColor;
+   tempCircleR = circleR;
+   returnColor = defaultC;
+  }  
+
+  Button(int X, int Y, float radius, color defaultC, color selectedC)
+  {
+   buttonX = X;
+   buttonY = Y;
+   circleR = radius;
+   defaultColor = defaultC;
+   selectedColor = selectedC;
   }
   
   boolean circleDisplay(float cursorX, float cursorY, float cursorR)
   {
-    fill(255);
+    fill(defaultColor);
+    stroke(0);
+    strokeWeight(5);
+    if(circleAni==true)
+    {
+      noStroke();
+    }
     ellipse(buttonX, buttonY, circleR, circleR);
-    fill(0);
+    fill(selectedColor);
     arc(buttonX, buttonY, circleR, circleR, PI*3/2, PI*3/2+activateProgress, PIE);
     if (coverBall(cursorX, cursorY, cursorR/2,buttonX, buttonY, circleR/4) == true)
     {
@@ -200,11 +232,28 @@ class Button
       activateProgress = 0;
     }
       if( activateProgress >= 2*PI )
-       {
-         return true;
+       { 
+         circleAni = true; 
        }
-       else
-       { return false;}
+       if( circleAni == true)
+       {
+         circleR += (0 - circleR) * buttonEasing;
+         tempFill += 15;
+         fill(255,tempFill);
+         stroke(0);
+         strokeWeight(5);
+         ellipse(buttonX, buttonY, tempCircleR, tempCircleR);
+         if(circleR < 4)
+         {
+           return true;
+         }
+         else
+         {
+           return false;
+         }
+
+       }
+       else return false;
   }
 
 boolean coverBall(float cx1, float cy1, float cr1, float cx2, float cy2, float cr2) {
@@ -216,14 +265,10 @@ boolean coverBall(float cx1, float cy1, float cr1, float cx2, float cy2, float c
       return false;
     }
   }
- void intro_1()
-   {
-     
-   } 
-   
- void intro_2()
-   {
-   }
+ color getColor()
+ {
+   return returnColor;
+ }
 }
 
 //    println(sketchPath(""));

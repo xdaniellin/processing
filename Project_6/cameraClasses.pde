@@ -92,7 +92,6 @@ class Webcam{
           brightestValue = pixelBrightness;
           brightestXY_Right[1] = y;
           brightestXY_Right[0] = x;
-
         }
         index+=skipScanValue;
       }

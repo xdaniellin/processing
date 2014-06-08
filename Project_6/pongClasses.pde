@@ -41,6 +41,11 @@ class Ball{
   float paddleHeight = 100;
   float paddleWidth = 20;
   
+  int intro = 0;
+  boolean flash = false;
+  boolean paddleFlash = false;
+
+  
   boolean hitPaddle(float rx, float ry, float rw, float rh, float cx, float cy, float cr) 
   {
     float ryUPDATED = ry -  rh/2;
@@ -55,12 +60,45 @@ class Ball{
     float cornerDistance = pow(circleDistanceX - rw/2, 2) + pow(circleDistanceY - rh/2, 2);
     return cornerDistance <= pow(cr, 2);
   }
-
   
+  void resetFlash()
+  {
+    if(flash==true)
+    {
+      flash = false;
+    }
+  }
+  void resetPaddleFlash()
+  {
+    if(paddleFlash == true)
+    {
+      paddleFlash = false;
+    }
+  }
   Ball(float W_in, float H_in)
   {
     paddleWidth = W_in;
     paddleHeight = H_in;
+  }
+  
+  Ball(float W_in, float H_in, int d_in)
+  {
+    paddleWidth = W_in;
+    paddleHeight = H_in;
+    intro = d_in;
+    ballSpeedX = random(10, 20);
+    ballSpeedY = random(-20, 20);
+    if (intro == 1)
+    {
+      ballSpeedX *= -1;
+    }
+  }
+  boolean getPaddleFlash()
+  {
+    return paddleFlash;
+  }
+  boolean getFlash(){
+    return flash;
   }
   
   float getX(){
@@ -95,48 +133,86 @@ class Ball{
       ballX += (ballSpeedX);
       ballY += (ballSpeedY);
       
+
     //ballX = ballX + ballSpeedX;
     //ballY = ballY + ballSpeedY;
     
     // Draw Paddle
     //fill(102);
     //rect(paddleX, paddleY, paddleWidth, paddleHeight);
-    
-    // If ball hits paddle, invert X direction and apply effects
-    boolean collision = hitPaddle(paddleX, paddleY - (paddleHeight/2), paddleWidth, paddleHeight, ballX, ballY, ballDiameter/2);
-    if ( collision == true ) {
-      println("OH SHIT");
+    if(intro == 1 || intro == 2)
+    {
+      boolean collisionCenter = hitPaddle(width/2, height/2 - (height/2), 5, height, ballX, ballY, ballDiameter/2);
+      if ( collisionCenter == true ) 
+      {
       ballSpeedX *= -1;
-      ballSpeedX *= 1.1;
+      ballSpeedX *= 1.0;
       ballX += (ballSpeedX);
+      }
+      boolean collision = hitPaddle(paddleX, paddleY - (paddleHeight/2), paddleWidth, paddleHeight, ballX, ballY, ballDiameter/2);
+      if ( collision == true ) 
+      {
+        println("OH SHIT");
+        ballSpeedX *= -1;
+        ballSpeedX *= 1.0;
+        ballX += (ballSpeedX);
+        paddleFlash = true;
+      }
+    }
+    // If ball hits paddle, invert X direction and apply effects
+    if(intro == 0)
+    {
+      boolean collision = hitPaddle(paddleX, paddleY - (paddleHeight/2), paddleWidth, paddleHeight, ballX, ballY, ballDiameter/2);
+      if ( collision == true ) {
+        println("OH SHIT");
+        ballSpeedX *= -1;
+        ballSpeedX *= 1.1;
+        ballX += (ballSpeedX);
+    }
 
       //ballX = paddleX-ballDiameter/2;
     }
   
     // Resets things if the ball leaves the screen
     if ((ballX > width + ballDiameter) || (ballX < -ballDiameter)) {
-      endFlow = true;
-      blinkRed = true;
-      gameStart = false;
       strokeFadeEase = 200;
-      if(ballX > width + ballDiameter)
-      {//Player 1 Wins
-        p1_win = true;
-        p2_win = false;
-      }
-      if(ballX < -ballDiameter)
-      {//Player 2 Wins
-        p2_win = true;
-        p1_win = false;
-      }
       ballX = width/2;
       ballY = height/2;
       ballSpeedX = random(10, 20);
-      if(random(0,1) > 0.5)
-      {ballSpeedX *= -1;}
-      ballSpeedY = random(10, 30);
-      if(random(0,1) > 0.5)
-      {ballSpeedY *= -1;}
+      if(intro == 0)
+      {
+        endFlow = true;
+        blinkRed = true;
+        gameStart = false;
+        if(ballX > width + ballDiameter)
+        {//Player 1 Wins
+          p1_win = true;
+          p2_win = false;
+        }
+        if(ballX < -ballDiameter)
+        {//Player 2 Wins
+          p2_win = true;
+          p1_win = false;
+        }
+        if(random(0,1) > 0.5)
+        {ballSpeedX *= -1;}
+      }
+      else if(intro == 1)
+      {
+        println("do u hear me");
+        flash = true;  
+        println(flash);
+        ballSpeedX *= -1;
+      }
+      else if(intro == 2)
+      { 
+        flash = true;
+        ballSpeedX *= 1;
+      }
+        ballSpeedY = random(10, 30);
+        if(random(0,1) > 0.5)
+        {ballSpeedY *= -1;}
+        
       paddle1.setH(paddleStartSize);
       paddle2.setH(paddleStartSize);
       orb1_Size = orbStartSize;
@@ -160,5 +236,4 @@ class Ball{
     }
   }
 
-  
 }
