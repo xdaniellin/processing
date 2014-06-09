@@ -27,6 +27,7 @@ class Paddle{
     //rect(mouseX-w/2, y, w, h);
     rect(x, yin - h/2, w, h);
   }
+
 }
 
 class Ball{

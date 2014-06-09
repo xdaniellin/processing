@@ -50,11 +50,11 @@ int strokeFadeEase; //=100;
 boolean missingLight_L = false;
 boolean missingLight_R = false;
 
-boolean startFlow = true;
+boolean startFlow = false;
 boolean endFlow = false;
 boolean resetEndFlow = true;
 
-boolean gameStart = false;
+boolean gameStart = true;
 
 boolean p1_win = false;
 boolean p2_win = false;
@@ -248,6 +248,7 @@ void draw() {
           text("?", width/4, height/2);
         } else
         {
+          fill(p1_color);
           ellipse(orb1_X, orb1_Y, orb1_Size, orb1_Size);
           arc(orb1_X, orb1_Y, orb1_Size, orb1_Size, PI*3/2, PI*3/2+player1_progress, PIE);
         }
@@ -279,18 +280,20 @@ void draw() {
 
         noStroke();
         strokeFadeEase += (0 - strokeFadeEase) * .20;  
-        fill(42, 168, 40, strokeFadeEase);
+        fill(p1_color);
         rect(0, 0, width/2, height);
 
 
-        fill(255, 204, 0, 128);
+        fill(p1_color);
         ellipse(orb1_X, orb1_Y, orb1Shadow_Size, orb1Shadow_Size);
         //orb1Shadow_Size -= (orb1Shadow_Size*2 / changeFrames);
         orb1Shadow_Size -= (orb1Shadow_Size*2) / changeFrames;
         orb1_Size +=((orb1_Size - orbSizeIncrement) - orb1_Size) * .10;// / changeFrames);
         //      orb1_Size -= (orbSizeIncrement / changeFrames);
         paddle1_H += ((paddle1_H + paddleLengthIncrement) - paddle1_H) * .10;
+        
         iter++;
+
         stroke(0, 255-strokeFade);
         ellipse(orb1_X, orb1_Y, orb1_Size, orb1_Size);
         stroke(0);
@@ -307,7 +310,7 @@ void draw() {
       }
       //arc(orb1_X, orb1_Y, orb1_Size, orb1_Size, PI*3/2, PI*3/2+player1_progress, PIE);
 
-
+     fill(p2_color);
       if ( coverBall(orb2_X, orb2_Y, orb2_Size/2, ball.getX(), ball.getY(), ball.getSize()/2) == true && levelUp_2 == false)
       {
         player2_progress += progressIncrement;
@@ -349,8 +352,7 @@ void draw() {
         fill(42, 168, 40, strokeFadeEase);
         rect(width/2, 0, width/2, height);
 
-
-        fill(255, 204, 0, 128);
+        fill(p2_color);
         ellipse(orb2_X, orb2_Y, orb2Shadow_Size, orb2Shadow_Size);
         //orb1Shadow_Size -= (orb1Shadow_Size*2 / changeFrames);
         orb2Shadow_Size -= (orb2Shadow_Size*2) / changeFrames;
@@ -376,8 +378,10 @@ void draw() {
       }
 
       //Draw paddles according to OrbsXY
+      fill(p1_color);
       paddle1_Y = constrain(round(orb1_Y), paddle1_H/2, height-(paddle1_H/2));   
       paddle1.drawPaddle(paddle1_Y); 
+      fill(p2_color);
       paddle2_Y = constrain(round(orb2_Y), paddle2_H/2, height-(paddle2_H/2));   
       paddle2.drawPaddle(paddle2_Y);
 
