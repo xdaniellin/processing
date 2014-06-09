@@ -6,7 +6,7 @@ Webcam webcam;
 Player player1, player2;
 Paddle paddle1, paddle2;
 Ball ball;
-Button player1_start, player2_start;
+Button player1_start, player2_start, backTo_start;
 Button p1_intro1, p2_intro1;
 Button p1_1x1, p2_1x1;
 Intro player1_intro, player2_intro;
@@ -64,12 +64,15 @@ float snapY_bot, snapY_top;
 boolean pauseRec = false;
 boolean saveAni = false;
 boolean blinkRed = true;
+boolean setTime = true;
 
 boolean p1_ready, p2_ready;
 
 color p1c_1x1 = color(255,0,0,128);
 
 color p1_color, p2_color;
+float savedBoxAlpha = 0;
+boolean fadeAway;
 
 void setup() {
   //Setup
@@ -95,6 +98,7 @@ void setup() {
   ball = new Ball(paddle1.getW(), paddle1.getH(),0);
   player1_start = new Button(width/4, height/2, 400);
   player2_start = new Button(width*3/4, height/2, 400);
+  backTo_start = new Button(width/2, height-300, 300);
   player1_intro = new Intro(1);
   player2_intro = new Intro(2);
   p1_intro1 = new Button(width/4, height/2+250, 200);
@@ -173,23 +177,83 @@ void draw() {
                 strokeWeight(0);
               }
               if (startScreen == true)
-              {
+              { 
+                if(setTime == true)
+                {
+                  lastTime = millis();
+                  setTime = false;
+                }
+
+                
+                fill(p1_color);
+                ellipse(orb1_X, orb1_Y, orb1_Size-100, orb1_Size-100);
+                fill(p2_color);
+                ellipse(orb2_X, orb2_Y, orb2_Size-100, orb2_Size-100);
+                fill(0);
+                if (backTo_start.circleDisplay(orb1_X, orb1_Y, orb1_Size-100) == true || backTo_start.circleDisplay(orb2_X, orb2_Y, orb2_Size-100) == true)
+                {
+                  startScreen = true;
+                }
                 if (player1_start.circleDisplay(orb1_X, orb1_Y, orb1_Size-100) == true)
                 {
-                  println("OKAY WHY IS THIS STILL TRIGGERING");
-                  gameStart = true;
-                  startScreen= false;
-                  resetEndFlow = true;
-                  targetY_bot = height/2;
-                  targetY_top = 0;            
+                  p1_ready = true;
+                  if(p2_ready == true)
+                  {
+                    gameStart = true;
+                    startScreen= false;
+                    resetEndFlow = true;
+                    targetY_bot = height/2;
+                    targetY_top = 0;     
+                    savedBoxAlpha = 0;
+                    p2_ready = false;
+                    p1_ready = false;
+                    setTime = true;
+                    fadeAway = false;
+
+                  }       
                 }
-                //player2_start.circleDisplay(orb2_X+300, orb2_Y, orb2_Size);
-                ellipse(orb1_X, orb1_Y, orb1_Size-100, orb1_Size-100);
-                //ellipse(orb2_X, orb2_Y, orb2_Size, orb2_Size-100);
+                if (player2_start.circleDisplay(orb2_X, orb2_Y, orb2_Size-100) == true)
+                {
+                  p2_ready = true;
+                  if(p1_ready == true)
+                  {
+                    gameStart = true;
+                    startScreen= false;
+                    resetEndFlow = true;
+                    targetY_bot = height/2;
+                    setTime = true;
+                    targetY_top = 0;     
+                    savedBoxAlpha = 0;
+                    p2_ready = false;
+                    p1_ready = false;
+                    fadeAway = false;
+                    
+                  }       
+                }
               }
+
               if (saveAni == true)
               {
                 saveAnimation();
+                if(millis() - lastTime > 1200)
+                {
+                  if(savedBoxAlpha > 250)
+                  {
+                    fadeAway = true;
+                  }
+                  if(fadeAway == true)
+                  {
+                    savedBoxAlpha -= 25;
+                  }
+                  savedBoxAlpha += 15;
+                  fill(0,savedBoxAlpha);
+                  noStroke();
+                  rect(width-210, height-110, 200, 100);
+                  fill(255,savedBoxAlpha);
+                  text(".png saved in \"" + sketchPath("") + "\"", width-210, height-110,200,100);
+                  stroke(0);
+                }
+                
               }
               if (blinkRed == true)
               {
