@@ -61,6 +61,11 @@ class Intro
        orbX = orb2_X;
        orbY = orb2_Y;
        orbR = orb2_Size - 100;
+      c_1x1 = p2_1x1;
+      intro_1 = p2_intro1;
+      paddle = paddle2;
+      paddle_Y = paddle2_Y;   
+      paddle_H = paddle2_H;
     }
   }
   
@@ -85,7 +90,12 @@ class Intro
      player = 2;
      IntroX = width/2;
      CenterX = IntroX + (width/4);
-     //intro_1 = p1_intro1;
+      intro_1 = p2_intro1;
+      paddle = paddle2;
+      paddle_X = paddle2_X;
+      paddle_Y = paddle2_Y;   
+      paddle_H = paddle2_H;
+     pball = new Ball(paddle.getW(), paddle.getH(),2);
    } 
  }
 
@@ -162,9 +172,16 @@ class Intro
    {
      if(c_1x1.circleDisplay(orbX, orbY, orbR) == true)
      {
+       if(player ==1)
+       {
        p1_color = p1_1x1.getColor();
+       }
+       else if(player == 2)
+       {
+         p2_color = p2_1x1.getColor();
+       }
        counter=3;
-       pColor = p1_color;
+       pColor = p1_1x1.getColor();
      }
    }
  }
@@ -181,12 +198,12 @@ class Intro
      for(int i=0; i<3; i++)
      {
        fill(40,150);
-       ellipse(((width/2-100)*(1+i))/3, height-50, 50, 50);
+       ellipse(((width/2-100)*(1+i))/3 +IntroX, height-50, 50, 50);
      }
      for(int i=0; i<trainingCounter; i++)
      {
        fill(42, 168, 40, textFade);
-       ellipse(((width/2-100)*(1+i))/3, height-50, 50, 50);
+       ellipse(((width/2-100)*(1+i))/3 +IntroX, height-50, 50, 50);
      }
      rectMode(CORNER);
      paddle_Y = constrain(round(orbY), paddle_H/2, height-(paddle_H/2));   
@@ -272,7 +289,7 @@ class Intro
      for(int i=0; i<3; i++)
      {
        fill(40,150);
-       ellipse(((width/2-100)*(1+i))/3, height-50, 50, 50);
+       ellipse(((width/2-100)*(1+i))/3 +IntroX, height-50, 50, 50);
      }
      for(int i=0; i<3; i++)
      {
@@ -282,18 +299,18 @@ class Intro
      fill(42, 168, 40, 250);
      if(trainingCounter2==0)
      {
-          arc(((width/2-100)*(1+0))/3, height-50, 50, 50, PI*3/2, PI*3/2+progress, PIE);
+          arc(((width/2-100)*(1+0))/3 +IntroX, height-50, 50, 50, PI*3/2, PI*3/2+progress, PIE);
      }
      else if(trainingCounter2 == 1)
      {
-          ellipse(((width/2-100)*(1+0))/3, height-50, 50, 50);
-          arc(((width/2-100)*(1+1))/3, height-50, 50, 50, PI*3/2, PI*3/2+progress, PIE);
+          ellipse(((width/2-100)*(1+0))/3 +IntroX, height-50, 50, 50);
+          arc(((width/2-100)*(1+1))/3 +IntroX, height-50, 50, 50, PI*3/2, PI*3/2+progress, PIE);
      }
      else if(trainingCounter2 == 2)
      {
-          ellipse(((width/2-100)*(1+0))/3, height-50, 50, 50);
-          ellipse(((width/2-100)*(1+1))/3, height-50, 50, 50);  
-          arc(((width/2-100)*(1+2))/3, height-50, 50, 50, PI*3/2, PI*3/2+progress, PIE);
+          ellipse(((width/2-100)*(1+0))/3 +IntroX, height-50, 50, 50);
+          ellipse(((width/2-100)*(1+1))/3 +IntroX, height-50, 50, 50);  
+          arc(((width/2-100)*(1+2))/3 +IntroX, height-50, 50, 50, PI*3/2, PI*3/2+progress, PIE);
      }
 
 
@@ -328,8 +345,6 @@ class Intro
         }
       }
      pball.display();
-     println("Paddle_H = " + paddle_H);
-     println("paddle1.getH() = " + paddle1.getH());
 
 
   if(levelUp == true)
@@ -438,8 +453,19 @@ class Intro
    }
    else
    {
+     if(player == 1)
+     {
       if (player1_start.circleDisplay(orb1_X, orb1_Y, orb1_Size-100) == true)
       {
+                  paddle1.setH(paddleStartSize);
+                  paddle1_H = paddleStartSize;
+                  paddle2.setH(paddleStartSize);
+                  paddle2_H = paddleStartSize;
+                  targetY_bot = height/2;
+                  targetY_top = 0;   
+        p1_ready = true;
+        if(p2_ready == true)
+          {
                   gameStart = true;
                   startScreen= false;
                   resetEndFlow = true;
@@ -448,7 +474,43 @@ class Intro
                   startFlow = false;
                   paddle1.setH(paddleStartSize);
                   paddle1_H += paddleStartSize;
+          }
       }
-   }
+      else 
+        {
+          p1_ready = true;
+        }
+      }
+     }
+     if(player == 2)
+     {
+      if (player2_start.circleDisplay(orb2_X, orb2_Y, orb2_Size-100) == true)
+      {
+                  paddle1.setH(paddleStartSize);
+                  paddle1_H = paddleStartSize;
+                  paddle2.setH(paddleStartSize);
+                  paddle2_H = paddleStartSize;
+                  targetY_bot = height/2;
+                  targetY_top = 0;   
+        p2_ready = true;
+        if(p1_ready == true)
+          {
+                  gameStart = true;
+                  startScreen= false;
+                  resetEndFlow = true;
+                  targetY_bot = height/2;
+                  targetY_top = 0;   
+                  startFlow = false;
+                  paddle2.setH(paddleStartSize);
+                  paddle2_H += paddleStartSize;
+          }
+      }
+      else 
+        {
+          p1_ready = true;
+        }
+      }
+  }
+
  }
-}
+

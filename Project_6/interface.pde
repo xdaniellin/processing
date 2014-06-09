@@ -81,8 +81,6 @@ void snapAnimation()
     waiting2 = false;
     }
   }
-
-    
   if(saveNow == true)
   {
     saveImg.textSize(50);
@@ -107,6 +105,7 @@ void snapAnimation()
     saveAni = true;
     pauseRec = false;
     displayText = false;
+    firstAni = true;
   }
   
   fill(255,255,255);
@@ -128,6 +127,7 @@ void saveAnimation()
   image(saveImg,imgX,imgY,saveImg_width, saveImg_height);
   if(firstAni == true)
   {
+    println("entering firstAni");
     displayCourt = true;
     startScreen = true;
     targetW = saveImg_width * .7;
@@ -145,8 +145,10 @@ void saveAnimation()
   
  if(waiting3 == true)
  {
+   println("entering waiting3");
     if( (millis()-lastTime_save) > 800)
     {
+         println("this is fucking triggering?");
       secondAni = true;
       waiting3 = false;
     }
@@ -154,6 +156,7 @@ void saveAnimation()
   
   if(secondAni == true)
   {
+    println("secondAni");
     targetW = saveImg_width* .05;
     targetH = saveImg_height * .05;
     targetX = width - (targetW/2) - 10;
@@ -161,6 +164,7 @@ void saveAnimation()
     secondAni = false;
     strokeFadeEase = 255;
     readyScreen = true;
+    resetEndFlow = true;
   }
   
   
@@ -175,6 +179,7 @@ class Button
    int buttonY;
    float hoverIncrement = .60;
    float circleR;
+   float saved_circleR;
    float activateProgress;
    color defaultColor = 255;
    color selectedColor, hoverColor, activateColor, returnColor;
@@ -188,6 +193,8 @@ class Button
    buttonX = X;
    buttonY = Y;
    circleR = radius;
+      saved_circleR = radius;
+
    tempCircleR = circleR;
   }
 
@@ -196,6 +203,7 @@ class Button
    buttonX = X;
    buttonY = Y;
    circleR = radius;
+   saved_circleR = radius;
    defaultColor = defaultC;
    selectedColor = defaultColor;
    tempCircleR = circleR;
@@ -207,6 +215,8 @@ class Button
    buttonX = X;
    buttonY = Y;
    circleR = radius;
+      saved_circleR = radius;
+
    defaultColor = defaultC;
    selectedColor = selectedC;
   }
@@ -243,8 +253,12 @@ class Button
          stroke(0);
          strokeWeight(5);
          ellipse(buttonX, buttonY, tempCircleR, tempCircleR);
+         activateProgress = 0;
+         
          if(circleR < 4)
          {
+           circleR = saved_circleR;
+           circleAni = false;
            return true;
          }
          else

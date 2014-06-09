@@ -7,8 +7,8 @@ Player player1, player2;
 Paddle paddle1, paddle2;
 Ball ball;
 Button player1_start, player2_start;
-Button p1_intro1;
-Button p1_1x1;
+Button p1_intro1, p2_intro1;
+Button p1_1x1, p2_1x1;
 Intro player1_intro, player2_intro;
 PGraphics camFrame, saveImg;
 
@@ -65,6 +65,8 @@ boolean pauseRec = false;
 boolean saveAni = false;
 boolean blinkRed = true;
 
+boolean p1_ready, p2_ready;
+
 color p1c_1x1 = color(255,0,0,128);
 
 color p1_color, p2_color;
@@ -90,13 +92,15 @@ void setup() {
   player2 = new Player();
   paddle1 = new Paddle(paddle1_X); 
   paddle2 = new Paddle(paddle2_X);
-  ball = new Ball(paddle1.getW(), paddle1.getH());
+  ball = new Ball(paddle1.getW(), paddle1.getH(),0);
   player1_start = new Button(width/4, height/2, 400);
   player2_start = new Button(width*3/4, height/2, 400);
   player1_intro = new Intro(1);
   player2_intro = new Intro(2);
   p1_intro1 = new Button(width/4, height/2+250, 200);
+  p2_intro1 = new Button(width*3/4, height/2+250,200);
   p1_1x1 = new Button(100,100,150,p1c_1x1);
+  p2_1x1 = new Button(100+width/2,100,150,p1c_1x1);
 
 
   //Global variable initializations
@@ -142,7 +146,7 @@ void draw() {
       if(startFlow == true)
       {
         player1_intro.display();
-        //player2_intro.display();
+        player2_intro.display();
       }
       if(endFlow == true)
       {
@@ -172,6 +176,7 @@ void draw() {
               {
                 if (player1_start.circleDisplay(orb1_X, orb1_Y, orb1_Size-100) == true)
                 {
+                  println("OKAY WHY IS THIS STILL TRIGGERING");
                   gameStart = true;
                   startScreen= false;
                   resetEndFlow = true;
@@ -208,13 +213,17 @@ void draw() {
 
     if (gameStart == true)
     { 
+      println("entering GameStart");
+      println(saveAni);
       if (resetEndFlow == true)
         {
+                println("entering resetEndFlow");
           targetSwitch = false;
           displayText = false;
           waiting = false;
           waiting2 = true;
-          waiting3 = true;
+           //waiting3 = true;
+          waiting3 = false;
           readyScreen = false;
           firstAni = true;
           secondAni = false;
@@ -280,7 +289,7 @@ void draw() {
 
         noStroke();
         strokeFadeEase += (0 - strokeFadeEase) * .20;  
-        fill(p1_color);
+        fill(42, 168, 40, strokeFadeEase);
         rect(0, 0, width/2, height);
 
 

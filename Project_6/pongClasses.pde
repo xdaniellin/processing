@@ -143,9 +143,10 @@ class Ball{
     //rect(paddleX, paddleY, paddleWidth, paddleHeight);
     if(intro == 1 || intro == 2)
     {
-      boolean collisionCenter = hitPaddle(width/2, height/2 - (height/2), 5, height, ballX, ballY, ballDiameter/2);
+      boolean collisionCenter = hitPaddle(width/2, height/2 - (height/2), 3, height, ballX, ballY, ballDiameter/2);
       if ( collisionCenter == true ) 
       {
+        println("OH IS THIS WHY");
       ballSpeedX *= -1;
       ballSpeedX *= 1.0;
       ballX += (ballSpeedX);
@@ -175,16 +176,17 @@ class Ball{
     }
   
     // Resets things if the ball leaves the screen
-    if ((ballX > width + ballDiameter) || (ballX < -ballDiameter)) {
+    if ((ballX > width + ballDiameter) || (ballX < -ballDiameter)) 
+    {
       strokeFadeEase = 200;
-      ballX = width/2;
-      ballY = height/2;
       ballSpeedX = random(10, 20);
       if(intro == 0)
       {
+        println("intro flow");
         endFlow = true;
         blinkRed = true;
         gameStart = false;
+        resetEndFlow = false;
         if(ballX > width + ballDiameter)
         {//Player 1 Wins
           p1_win = true;
@@ -200,7 +202,6 @@ class Ball{
       }
       else if(intro == 1)
       {
-        println("do u hear me");
         flash = true;  
         println(flash);
         ballSpeedX *= -1;
@@ -208,12 +209,20 @@ class Ball{
       else if(intro == 2)
       { 
         flash = true;
-        ballSpeedX *= 1;
+        //ballSpeedX *= 1;
+        if(ballSpeedX < 0)
+        {
+          ballSpeedX *= -1;
+        }
       }
+      ballX = width/2;
+      ballY = height/2;
         ballSpeedY = random(10, 30);
         if(random(0,1) > 0.5)
         {ballSpeedY *= -1;}
-        
+        ballX += (ballSpeedX);
+        ballX += (ballSpeedX);
+
       paddle1.setH(paddleStartSize);
       paddle2.setH(paddleStartSize);
       orb1_Size = orbStartSize;
