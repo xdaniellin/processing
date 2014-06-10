@@ -50,11 +50,11 @@ int strokeFadeEase; //=100;
 boolean missingLight_L = false;
 boolean missingLight_R = false;
 
-boolean startFlow = false;
+boolean startFlow = true;
 boolean endFlow = false;
 boolean resetEndFlow = true;
 
-boolean gameStart = true;
+boolean gameStart = false;
 
 boolean p1_win = false;
 boolean p2_win = false;
