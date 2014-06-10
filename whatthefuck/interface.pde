@@ -57,34 +57,21 @@ void snapAnimation()
 
   if (displayText == true)
   {
-    rectMode(CENTER);
-
     textSize(50);
     textAlign(CENTER);
     if(p1_win == true)
     {
-    fill(111, 204, 101, 240);
-    rect(width/4, height-85, width/2-80, 120, 7);
-    fill(255,108,108,240);
-        rect(width*3/4, height-85, width/2-80, 120, 7);
-    fill(255);
-      text("Winner!", width/4, height-55, 450, 100);
-      text("Loser", width*3/4, height-55,450,100);
+      text("Winner!", width/4, height/2+250);
+      text("Loser", width*3/4, height/2+250);
     }
     else if(p2_win == true)
     {
-    fill(111, 204, 101, 240);
-    rect(width*3/4, height-85, width/2-80, 120, 7);
-    fill(255,108,108,240);
-        rect(width/4, height-85, width/2-80, 120, 7);
-    fill(255);
-      text("Winner!", width*3/4, height-55, 450, 100);
-      text("Loser", width/4, height-55,450,100);
+      text("Winner!", width*3/4, height/2+250);
+      text("Loser", width/4, height/2+250);
     }
     textSize(20);
-    //text("Logo_here", 65, 25);
+    text("Logo_here", 65, 25);
 
-    rectMode(CORNER);
     
     
     if(waiting2 == true)
@@ -96,36 +83,20 @@ void snapAnimation()
   }
   if(saveNow == true)
   {
-    saveImg.rectMode(CENTER);
-
     saveImg.textSize(50);
     saveImg.textAlign(CENTER);
     if(p1_win == true)
     {
-    saveImg.fill(111, 204, 101, 240);
-    saveImg.rect(width/4, height-85, width/2-80, 120, 7);
-    saveImg.fill(255,108,108,240);
-        saveImg.rect(width*3/4, height-85, width/2-80, 120, 7);
-    saveImg.fill(255);
-      saveImg.text("Winner!", width/4, height-55, 450, 100);
-      saveImg.text("Loser", width*3/4, height-55,450,100);
+      saveImg.text("Winner!", width/4, height/2+250);
+      saveImg.text("Loser", width*3/4, height/2+250);
     }
     else if(p2_win == true)
     {
-    saveImg.fill(111, 204, 101, 240);
-    saveImg.rect(width*3/4, height-85, width/2-80, 120, 7);
-    saveImg.fill(255,108,108,240);
-        saveImg.rect(width/4, height-85, width/2-80, 120, 7);
-    saveImg.fill(255);
-      saveImg.text("Winner!", width*3/4, height-55, 450, 100);
-      saveImg.text("Loser", width/4, height-55,450,100);
+      saveImg.text("Winner!", width*3/4, height/2+250);
+      saveImg.text("Loser", width/4, height/2+250);
     }
     saveImg.textSize(20);
-    //text("Logo_here", 65, 25);
-
-    saveImg.rectMode(CORNER);
-    saveImg.textSize(20);
-    //saveImg.text("Logo_here", 65, 25);
+    saveImg.text("Logo_here", 65, 25);
     saveImg.endDraw();
     saveFrame("Orby-" + nf(count,3) +".tif");
     count++;
@@ -156,6 +127,7 @@ void saveAnimation()
   image(saveImg,imgX,imgY,saveImg_width, saveImg_height);
   if(firstAni == true)
   {
+    println("entering firstAni");
     displayCourt = true;
     startScreen = true;
     targetW = saveImg_width * .7;
@@ -173,8 +145,10 @@ void saveAnimation()
   
  if(waiting3 == true)
  {
+   println("entering waiting3");
     if( (millis()-lastTime_save) > 800)
     {
+         println("this is fucking triggering?");
       secondAni = true;
       waiting3 = false;
     }
@@ -182,9 +156,10 @@ void saveAnimation()
   
   if(secondAni == true)
   {
+    println("secondAni");
     targetW = saveImg_width* .05;
     targetH = saveImg_height * .05;
-    targetX = width+30;// - (targetW/2) - 10;
+    targetX = width - (targetW/2) - 10;
     targetY = height - (targetH/2) - 10;
     secondAni = false;
     strokeFadeEase = 255;
@@ -209,12 +184,11 @@ class Button
    float saved_circleR;
    float activateProgress;
    color defaultColor = 255;
-   color selectedColor, hoverColor, activateColor, returnColor, supplementColor;
+   color selectedColor, hoverColor, activateColor, returnColor;
    float buttonEasing = 0.35;
    boolean circleAni = false;
    float tempCircleR;
    float tempFill = 0;
-
    
    //rect Button
    Button(int X, int Y, int W, int L, color defaultC, color hoverC, color activateC)
@@ -249,43 +223,16 @@ class Button
    tempCircleR = circleR;
    returnColor = color(red(defaultC), green(defaultC), blue(defaultC));
   }  
-  color getS()
-  {
-   return supplementColor; 
-  }
 
   Button(int X, int Y, float radius, color defaultC, color selectedC)
   {
    buttonX = X;
    buttonY = Y;
    circleR = radius;
-   saved_circleR = radius;
+      saved_circleR = radius;
 
    defaultColor = defaultC;
-   supplementColor = selectedC;
-   tempCircleR = circleR;
-
-   selectedColor = defaultColor;
-   returnColor = color(red(defaultC), green(defaultC), blue(defaultC));
-
-
-  }
-  
-  Button(int X, int Y, float radius, color defaultC, color selectedC, int ok)
-  {
-   buttonX = X;
-   buttonY = Y;
-   circleR = radius;
-   saved_circleR = radius;
-
-   defaultColor = defaultC;
-   supplementColor = selectedC;
-   tempCircleR = circleR;
-
    selectedColor = selectedC;
-   returnColor = color(red(defaultC), green(defaultC), blue(defaultC));
-
-
   }
   
   boolean rectDisplay(float cursorX, float cursorY, float cursorR)
@@ -303,7 +250,7 @@ class Button
     else 
     {
       activateProgress -= .10;
-      if(activateProgress <= 0)
+      if(activateProgress < 0)
       {
         activateProgress = 0;
       }
@@ -333,55 +280,9 @@ class Button
   float cornerDistance = pow(circleDistanceX - rw/2, 2) + pow(circleDistanceY - rh/2, 2);
   return cornerDistance <= pow(cr, 2);
 }
-/*
-  boolean circleDisplayHOLD(float cursorX, float cursorY, float cursorR)
-  {
-    ellipseMode(CENTER);
-    fill(defaultColor);
-    stroke(0);
-    strokeWeight(2);
-    if(circleAni==true)
-    {
-      noStroke();
-    }
-    ellipse(buttonX, buttonY, circleR, circleR);
-    fill(defaultColor);
-    arc(buttonX, buttonY, circleR, circleR, PI*3/2, PI*3/2+activateProgress, PIE);
-    if (coverBall(cursorX, cursorY, cursorR/2,buttonX, buttonY, circleR/4) == true)
-    {
-      activateProgress += hoverIncrement;
-    }
-    else 
-    {
-      activateProgress = 0;
-    }
-      if( activateProgress >= 2*PI )
-       { 
-         circleAni = true; 
-       }
-       if( circleAni == true)
-       {
-         circleR += (0 - circleR) * buttonEasing;
-         tempFill += 15;
-         fill(selectedColor,tempFill);
-         stroke(0);
-         strokeWeight(2);
-         ellipse(buttonX, buttonY, tempCircleR, tempCircleR);
-         activateProgress = 0;
-         
-    if (coverBall(cursorX, cursorY, cursorR/2,buttonX, buttonY, circleR/4) == true)
-    {
-         return true;
-    }
-         return false;
-       }
-       else return false;
-  }*/
-  
+
   boolean circleDisplay(float cursorX, float cursorY, float cursorR)
   {
-    println(cursorR);
-    ellipseMode(CENTER);
     fill(defaultColor);
     stroke(0);
     strokeWeight(2);
@@ -390,13 +291,11 @@ class Button
       noStroke();
     }
     ellipse(buttonX, buttonY, circleR, circleR);
-    fill(defaultColor);
+    fill(selectedColor);
     arc(buttonX, buttonY, circleR, circleR, PI*3/2, PI*3/2+activateProgress, PIE);
     if (coverBall(cursorX, cursorY, cursorR/2,buttonX, buttonY, circleR/4) == true)
     {
       activateProgress += hoverIncrement;
-      println(activateProgress);
-      println("hoverIncrement" + hoverIncrement);
     }
     else 
     {
@@ -405,14 +304,12 @@ class Button
       if( activateProgress >= 2*PI )
        { 
          circleAni = true; 
-      activateProgress = 0;
-
        }
        if( circleAni == true)
        {
          circleR += (0 - circleR) * buttonEasing;
          tempFill += 15;
-         fill(selectedColor,tempFill);
+         fill(255,tempFill);
          stroke(0);
          strokeWeight(2);
          ellipse(buttonX, buttonY, tempCircleR, tempCircleR);

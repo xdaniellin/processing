@@ -185,10 +185,6 @@ class Ball{
       ballSpeedX = random(10, 20);
       if(intro == 0)
       {
-                player1_intro.setCounter(5);
-                player2_intro.setCounter(5);
-                player1_intro.setReadyTrigger();
-                player2_intro.setReadyTrigger();
         println("intro flow");
         endFlow = true;
         blinkRed = true;
@@ -241,33 +237,16 @@ class Ball{
     }
   
     // If ball hits top or bottom, change direction of Y  
-    if(intro == 0)
-  {
     if ( ballY > height-ballDiameter/2 ) {
       ballY = height-ballDiameter/2;
       ballSpeedY = ballSpeedY * -1;
       ballY = ballY + ballSpeedY;
-    }
- else if ( ballY < ballDiameter/2 ) {
+    } 
+    else if ( ballY < ballDiameter/2 ) {
       ballY = ballDiameter/2;
       ballSpeedY = ballSpeedY * -1;
       ballY = ballY + ballSpeedY;
     }
-  }
-    if(intro == 1 || intro == 2)
-   {
-      if ( ballY > height-85-75-ballDiameter/2 ) {
-      ballY = height-85-75-ballDiameter/2;
-      ballSpeedY = ballSpeedY * -1;
-      ballY = ballY + ballSpeedY;
-    }
- else if ( ballY < ballDiameter/2 ) {
-      ballY = ballDiameter/2;
-      ballSpeedY = ballSpeedY * -1;
-      ballY = ballY + ballSpeedY;
-    }
-   } 
-   
   }
 
 }
