@@ -14,6 +14,7 @@ Button p1_2x1, p2_2x1;
 Button p1_2x2, p2_2x2;
 Button p1_3x1, p2_3x1;
 Button p1_3x2, p2_3x2;
+Button startOver;
 Intro player1_intro, player2_intro;
 PGraphics camFrame, saveImg; 
 PFont font;
@@ -56,11 +57,11 @@ int strokeFadeEase; //=100;
 boolean missingLight_L = false;
 boolean missingLight_R = false;
 
-boolean startFlow = false;
+boolean startFlow = true;
 boolean endFlow = false;
 boolean resetEndFlow = true;
 
-boolean gameStart = true;
+boolean gameStart = false;
 
 boolean p1_win = false;
 boolean p2_win = false;
@@ -85,6 +86,7 @@ color p1_color, p2_color;
 color p1_colorSupplement, p2_colorSupplement;
 float savedBoxAlpha = 0;
 boolean fadeAway;
+
 
 void setup() {
   //Setup
@@ -115,6 +117,8 @@ void setup() {
   backTo_start = new Button(width/2, height-300, 300);
   player1_intro = new Intro(1);
   player2_intro = new Intro(2);
+  startOver = new Button(width/2, 60, 500,100, color(0,0,0,128), color(#93dbda), color(42,1168,40,250));
+
   p1_intro1 = new Button(width/4, height/2+250, 200);
   p2_intro1 = new Button(width*3/4, height/2+250,200);
   
@@ -176,6 +180,7 @@ void draw() {
         mirrorVideoDisplay();
       if(startFlow == true)
       {
+        textAlign(CENTER);
         stroke(20);
         strokeWeight(4);
         line(width/2, 0, width/2, height);
@@ -209,6 +214,15 @@ void draw() {
               {
                 player1_intro.display();
                 player2_intro.display();
+                /* fill(255,255);
+                text("Start Screen", width/4, 50, 650,50) ;
+                if (startOver.rectDisplay(orb1_X, orb1_Y, orb1_Size-100) == true || startOver.rectDisplay(orb2_X, orb2_Y, orb2_Size-100) == true)
+                {
+                  player1_intro.setCounter(0);
+                  player2_intro.setCounter(0);
+                  startScreen = false;
+                  startFlow = true;
+                }*/
                 /*if(setTime == true)
                 {
                   lastTime = millis();
@@ -504,7 +518,7 @@ void draw() {
         fill(p2_color);
         float x = lerp(orb2_X, paddle2.getX()+10, i/20.0);
         float y = lerp(orb2_Y, orb2_Y, i/20.0);
-        stroke(p1_color,200);
+        stroke(p2_color,200);
         strokeWeight(4);
         point(x, y);
         strokeWeight(2);

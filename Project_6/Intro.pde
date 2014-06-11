@@ -722,16 +722,22 @@ stroke(0);
       }
       else
       {
-        text("Waiting for opponent...", CenterX, height-50, 600, 200);
+        text("Waiting for opponent...", CenterX, height-50, 600, 100);
       }
     
     update();
-    if (lightMissing == true)
-    {
-      noLightDisplay();
-    }
-   
-    else
+      if(readyTrigger == true)
+      {
+                textAlign(CENTER,CENTER);
+        fill(255,255);
+        text("READY", CenterX, height/2, 300,300);
+        textAlign(CENTER,TOP);
+       fill(42, 168, 40, map( sin(facetime), -1, 1, 30, 300));
+       facetime++;
+       ellipse(CenterX, height/2, 250, 250);
+      }
+
+    
     {
       if (player == 1)
       {
@@ -771,16 +777,7 @@ stroke(0);
         text("START", CenterX, height/2, 300,300);
         textAlign(CENTER,TOP);
       }
-      if(readyTrigger == true)
-      {
-                textAlign(CENTER,CENTER);
-        fill(255,255);
-        text("READY", CenterX, height/2, 300,300);
-        textAlign(CENTER,TOP);
-       fill(42, 168, 40, map( sin(facetime), -1, 1, 30, 300));
-       facetime++;
-       ellipse(CenterX, height/2, 250, 250);
-      }
+
       
                 if (p2_ready == true && p1_ready == true)
           {
@@ -793,7 +790,7 @@ stroke(0);
             readyTrigger = false;
             paddle1.setH(paddleStartSize);
             paddle1_H = paddleStartSize;
-            paddle2.setH(paddelStartSize);
+            paddle2.setH(paddleStartSize);
             paddle2_H = paddleStartSize;
             startScreen = false;
             counter = 0;
